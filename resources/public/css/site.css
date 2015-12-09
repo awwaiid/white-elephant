@@ -6,8 +6,16 @@ body {
   padding-top: 72px;
   -webkit-font-smoothing: antialiased;
   font-size: 1.125em;
+  /* font-size: 1em; */
   color: #333;
   line-height: 1.5em;
+  width: 800px;
+  /* background-color: #999; */
+}
+
+#app {
+  /* background-color: #fff; */
+  padding: 2em;
 }
 
 h1, h2, h3 {
@@ -34,9 +42,9 @@ a:hover {
   text-decoration: underline;
 }
 
-.best, .current {
+.product {
   border: 1px solid black;
-  float: left;
+  /* float: left; */
   width: 400px;
   padding: 10px;
 }
@@ -49,13 +57,32 @@ a:hover {
 .another, .thisone {
   border: 1px solid black;
   float: left;
-  height: 100px;
-  width: 100px;
+  /* height: 100px; */
+  width: 190px;
   padding: 10px;
 }
 .another {
   background-color: coral;
 }
 .thisone {
-  background-color: aquamarine
+  background-color: aquamarine;
+  clear: right;
+}
+.contenders .price, .contenders .title, .contenders .link {
+  display: none;
+}
+.contenders .product {
+  width: 100px;
+  float: left;
+  border: 0;
+  padding: 0;
+}
+
+.contenders .product .img {
+  width: 100px;
+  margin: 0;
+}
+
+hr {
+  clear: both;
 }

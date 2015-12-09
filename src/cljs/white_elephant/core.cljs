@@ -57,66 +57,85 @@
                       :text "Hello to all the really strange wonderful weird new world!"
                       :min-price 0
                       :max-price 2000
+                      :possible-products []
                       :product {
                                 :img "https://www.blinq.com/search/thumb.php?s=172&aspect=true&f=https%3a%2f%2fin…sl.fastly.net%2f1588078%2ftwo_fifty%2f9750412txAJlbgL.jpg.jpg%3f1447436187"
                                 :title "Calabria 91348 Bi-Focal Safety Glasses UV Protection in Smoke ; +1.00"
                                 :url "https://blinq.resultspage.com/search?p=R&ts=infinitescroll&uid=554603337&w=…afety-glasses-uv-protection-in-smoke-1-00%2f590946%3fcondition%3dbrand-new"
                       :price "$17.01"
                                 }
-                      :best-product {
+                      :next-product {
                                 :img "https://www.blinq.com/search/thumb.php?s=172&aspect=true&f=https%3a%2f%2fin…sl.fastly.net%2f1588078%2ftwo_fifty%2f9750412txAJlbgL.jpg.jpg%3f1447436187"
                                 :title "Calabria 91348 Bi-Focal Safety Glasses UV Protection in Smoke ; +1.00"
                                 :url "https://blinq.resultspage.com/search?p=R&ts=infinitescroll&uid=554603337&w=…afety-glasses-uv-protection-in-smoke-1-00%2f590946%3fcondition%3dbrand-new"
                       :price "$17.01"
                                 }
+                      ; :best-product {
+                      ;           :img "https://www.blinq.com/search/thumb.php?s=172&aspect=true&f=https%3a%2f%2fin…sl.fastly.net%2f1588078%2ftwo_fifty%2f9750412txAJlbgL.jpg.jpg%3f1447436187"
+                      ;           :title "Calabria 91348 Bi-Focal Safety Glasses UV Protection in Smoke ; +1.00"
+                      ;           :url "https://blinq.resultspage.com/search?p=R&ts=infinitescroll&uid=554603337&w=…afety-glasses-uv-protection-in-smoke-1-00%2f590946%3fcondition%3dbrand-new"
+                      ; :price "$17.01"
+                      ;           }
                       }))
 
 (defn handler [response]
   (.log js/console (str response))
-  (swap! app-state assoc :product response)
+  (swap! app-state assoc :next-product response)
   (.log js/console (str "App state:" @app-state))
   )
 
 (defn next-product []
+  (swap! app-state assoc :product (get @app-state :next-product))
   (GET "/random-product" {
                           :response-format :json
                           :keywords? true
                           :handler handler}))
 
 (defn save-product []
-  (swap! app-state assoc :best-product (get @app-state :product))
+  (swap! app-state update-in [:possible-products] conj (get @app-state :product))
   (next-product))
+
+(defn product [product-info]
+   [:div.product
+     [:img { :src (get product-info :img) }]
+     [:div.price "Price " (get product-info :price)]
+     [:a.link { :href (get product-info :url) } "Product Details / Buy"]
+     [:h3.title (get product-info :title)]])
+
+(defn possible-products-count []
+  (let [c (count (@app-state :possible-products))]
+    [:div.selected-count
+     (str c " products selected")]))
 
 (defn hello-world []
   [:div
 
    [:h2 "White Elephant Gift Selector"]
 
-   [:div { :class "best" }
-     [:h3 "Current 'BEST' gift"]
-     [:img { :src (get-in @app-state [:best-product :img]) }]
-     [:div "Price " (get-in @app-state [:best-product :price])]
-     [:a { :href (get-in @app-state [:best-product :url]) } "Product Details / Buy"]
-     [:h3 (get-in @app-state [:best-product :title])]
-     ]
+   (possible-products-count)
 
-   [:div { :class "current" }
-     [:h3 "... is this one 'BETTER'?!‽"]
-     [:img { :src (get-in @app-state [:product :img]) }]
-     [:div "Price " (get-in @app-state [:product :price])]
-     [:a { :href (get-in @app-state [:product :url]) } "Product Details / Buy"]
-     [:h3 (get-in @app-state [:product :title])]
-     ]
+   [:div.current
+    [:h3 "Worthy for consideration?"]
+    (product (get @app-state :product))]
 
-   [:div { :class "actions" }
-     [:div { :class "another" :onClick next-product } "Show me another product..."]
-     [:div { :class "thisone" :onClick save-product } "That's the best so far!"]]])
+   [:div.actions
+    [:div { :class "another" :onClick next-product } "Next!"]
+    [:div { :class "thisone" :onClick save-product } "Keep it!"]]
+   [:hr]
+  [:div.contenders
+  ; For debugging
+  (map product (@app-state :possible-products))
+   ]
+  ]
+  )
 
 (defn render []
   (reagent/render-component [hello-world]
                             (. js/document (getElementById "app"))))
 
 (defn init! []
+  (next-product)
+  (next-product)
   (render))
 
 

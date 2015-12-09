@@ -52,6 +52,7 @@
   (let [offset (rand-int 10000)
         low-price 0
         high-price 2000]
+    (printf "Offset: %d\n" offset)
     (str "https://www.blinq.com/search/go?p=Q&lbc=blinq&w=*&af=price%3a%5b"
          low-price
          "%2c"

@@ -72,7 +72,7 @@
 
 (defn product [product-info]
   (dlog (str "Re-render product:" (get product-info :title)))
-   [:div.product
+   [:div.product.clearfix
      [:img.photo { :src (get product-info :img) }]
      [:div.price "Price " (get product-info :price)]
      [:a.buy-link { :href (get product-info :url) :target "_blank" } "Product Details / Buy"]
@@ -81,7 +81,8 @@
 (defn possible-products-count []
   (let [c (count (@app-state :possible-products))]
     [:div.selected-count
-     (str c " products selected (16+ recommended)")]))
+     [:strong.count (str c)]
+     (str " products selected (16+ recommended)")]))
 
 (defn triage-products []
   [:div
@@ -95,14 +96,14 @@
    [:div
     [:a {:href "/about"} "go to about page"]
     " - "
-    [:a {:href "/tournament"} "go to phase 2"]
     ]
     [:h3 "Worthy for consideration?"]
-     [:div.actions
-      [:div { :class "another" :onClick next-product } "Next!"]
-      [:div { :class "thisone" :onClick save-product } "Keep it!"]]
-   [:hr]
+     [:div.actions.clearfix
+      [:div.another { :onClick next-product } "Next!"]
+      [:div.thisone { :onClick save-product } "Keep it!"]]
+   ; [:hr]
     [product (get @app-state :product)]]
+      [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")]
 
   [:div.contenders
   ; For debugging
@@ -152,13 +153,19 @@
           " - "
           [:a {:href "/"} "back to phase 1"]
 
-         [:h4 (str "There are " (- (count products) 2) " match-ups after this!")]
+         [:h4.remaining-count
+          [:span "There are "]
+          [:span.count (- (count products) 2)]
+          [:span " match-ups after this!"]]
 
-         [:div { :class "another" :onClick #(tournament-keep product-1) } "This one"]
-         [product product-1]
+         [:div.clearfix
+           [:div.compare
+             [:div.clearfix [:div.another { :onClick #(tournament-keep product-1) } "This one"]]
+             [product product-1]]
 
-         [:div { :class "thisone" :onClick #(tournament-keep product-2) } "This one"]
-         [product product-2]
+           [:div.compare
+             [:div.clearfix [:div.thisone { :onClick #(tournament-keep product-2) } "This one"]]
+             [product product-2]]]
 
          ]))))
 

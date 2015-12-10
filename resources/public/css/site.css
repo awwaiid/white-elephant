@@ -1,3 +1,15 @@
+/* new clearfix */
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+    }
+* html .clearfix             { zoom: 1; } /* IE6 */
+*:first-child+html .clearfix { zoom: 1; } /* IE7 */
+
 body {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   /* max-width: 600px; */
@@ -53,7 +65,7 @@ a:hover {
  border: 1px solid black;
 }
 
-.another, .thisone {
+.another, .thisone, .onward {
   border: 1px solid black;
   float: left;
   /* height: 100px; */
@@ -67,7 +79,12 @@ a:hover {
 }
 .thisone {
   background-color: aquamarine;
-  clear: right;
+}
+.onward {
+  background-color: lightgreen;
+  width: 400px;
+  color: black;
+  clear: both;
 }
 
 /* .contenders { */
@@ -108,3 +125,14 @@ hr {
   clear: both;
 }
 
+.count {
+  font-size: 2em;
+}
+
+.compare {
+  border: 1px solid black;
+}
+
+.compare .product {
+  border: 0;
+}

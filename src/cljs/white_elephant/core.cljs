@@ -21,31 +21,29 @@
    ])
 
 (defonce app-state (atom {
-                      :text "Hello to all the really strange wonderful weird new world!"
-                      :min-price 0
-                      :max-price 2000
-                      :possible-products []
-                      :product {
-                                :img "https://www.blinq.com/search/thumb.php?s=172&aspect=true&f=https%3a%2f%2fin…sl.fastly.net%2f1588078%2ftwo_fifty%2f9750412txAJlbgL.jpg.jpg%3f1447436187"
-                                :title "Calabria 91348 Bi-Focal Safety Glasses UV Protection in Smoke ; +1.00"
-                                :url "https://blinq.resultspage.com/search?p=R&ts=infinitescroll&uid=554603337&w=…afety-glasses-uv-protection-in-smoke-1-00%2f590946%3fcondition%3dbrand-new"
-                      :price "$17.01"
-                                }
-                      :next-product {
-                                :img "https://www.blinq.com/search/thumb.php?s=172&aspect=true&f=https%3a%2f%2fin…sl.fastly.net%2f1588078%2ftwo_fifty%2f9750412txAJlbgL.jpg.jpg%3f1447436187"
-                                :title "Calabria 91348 Bi-Focal Safety Glasses UV Protection in Smoke ; +1.00"
-                                :url "https://blinq.resultspage.com/search?p=R&ts=infinitescroll&uid=554603337&w=…afety-glasses-uv-protection-in-smoke-1-00%2f590946%3fcondition%3dbrand-new"
-                      :price "$17.01"
-                                }
-                      }))
+                          :text "Hello to all the really strange wonderful weird new world!"
+                          :min-price 0
+                          :max-price 2000
+                          :possible-products []
+                          :product {
+                                    :img ""
+                                    :title ""
+                                    :url ""
+                                    :price ""
+                                    }
+                          :next-product {
+                                         :img ""
+                                         :title ""
+                                         :url ""
+                                         :price ""
+                                         }
+                          }))
 
 (defn next-product-handler [response]
-  (.log js/console (str response))
+  ; (.log js/console (str response))
   (swap! app-state assoc :next-product response)
   ; Pre-fetch the image, specifically
-  (aset (js/Image.) "src" (get response :img))
-  ; (.log js/console (str "App state:" @app-state))
-  )
+  (aset (js/Image.) "src" (get response :img)))
 
 (defn next-product []
   (swap! app-state assoc :product (get @app-state :next-product))
@@ -53,6 +51,19 @@
                           :response-format :json
                           :keywords? true
                           :handler next-product-handler}))
+
+(defn first-product-handler [response]
+  ; (.log js/console (str response))
+  (swap! app-state assoc :next-product response)
+  ; Pre-fetch the image, specifically
+  (aset (js/Image.) "src" (get response :img))
+  (next-product))
+
+(defn first-product []
+  (GET "/random-product" {
+                          :response-format :json
+                          :keywords? true
+                          :handler first-product-handler}))
 
 (defn save-product []
   (swap! app-state update-in [:possible-products] conj (get @app-state :product))
@@ -62,9 +73,9 @@
 (defn product [product-info]
   (dlog (str "Re-render product:" (get product-info :title)))
    [:div.product
-     [:img { :src (get product-info :img) }]
+     [:img.photo { :src (get product-info :img) }]
      [:div.price "Price " (get product-info :price)]
-     [:a.link { :href (get product-info :url) :target "_blank" } "Product Details / Buy"]
+     [:a.buy-link { :href (get product-info :url) :target "_blank" } "Product Details / Buy"]
      [:h3.title (get product-info :title)]])
 
 (defn possible-products-count []
@@ -183,4 +194,5 @@
 (defn init! []
   (accountant/configure-navigation!)
   (accountant/dispatch-current!)
+  (first-product)
   (mount-root))

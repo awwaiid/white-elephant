@@ -70,10 +70,10 @@ a:hover {
   clear: right;
 }
 
-.contenders {
-  border: 1px solid black;
-}
-.contenders .price, .contenders .link {
+/* .contenders { */
+/*   border: 1px solid black; */
+/* } */
+.contenders .price, .contenders .buy-link {
   font-size: 1em;
   display: inline;
   margin-right: 1em;
@@ -86,8 +86,12 @@ a:hover {
 }
 .contenders .product {
   width: 700px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  border: 0;
   padding: 0;
+  border-top: 1px solid black;
+  margin-top: 0.25em;
+  padding-top: 0.5em;
   clear: both;
 }
 
@@ -95,7 +99,7 @@ a:hover {
   width: 50px;
   height: 50px;
   margin: 0;
-  border: 1px solid green;
+  /* border: 1px solid green; */
   float: left;
   margin-right: 1em;
 }

@@ -82,7 +82,7 @@
   (let [c (count (@app-state :possible-products))]
     [:div.selected-count
      [:strong.count (str c)]
-     (str " products selected (16+ recommended)")]))
+     (str " products selected (16+ needed)")]))
 
 (defn triage-products []
   [:div
@@ -103,7 +103,8 @@
       [:div.thisone { :onClick save-product } "Keep it!"]]
    ; [:hr]
     [product (get @app-state :product)]]
-      [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")]
+   (if (>= (count (@app-state :possible-products)) 16)
+      [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")])
 
   [:div.contenders
   ; For debugging

@@ -20,10 +20,6 @@
           "This is a tool to pick out the BEST White Elephant Gift!"]]
    ])
 
-(enable-console-print!)
-
-(println "Edits to this text should show up in my developer console.")
-
 (defonce app-state (atom {
                       :text "Hello to all the really strange wonderful weird new world!"
                       :min-price 0
@@ -60,6 +56,7 @@
 
 (defn save-product []
   (swap! app-state update-in [:possible-products] conj (get @app-state :product))
+  (swap! app-state update-in [:possible-products] shuffle)
   (next-product))
 
 (defn product [product-info]
@@ -67,13 +64,13 @@
    [:div.product
      [:img { :src (get product-info :img) }]
      [:div.price "Price " (get product-info :price)]
-     [:a.link { :href (get product-info :url) } "Product Details / Buy"]
+     [:a.link { :href (get product-info :url) :target "_blank" } "Product Details / Buy"]
      [:h3.title (get product-info :title)]])
 
 (defn possible-products-count []
   (let [c (count (@app-state :possible-products))]
     [:div.selected-count
-     (str c " products selected")]))
+     (str c " products selected (16+ recommended)")]))
 
 (defn triage-products []
   [:div
@@ -86,6 +83,7 @@
    [:div.current
    [:div
     [:a {:href "/about"} "go to about page"]
+    " - "
     [:a {:href "/tournament"} "go to phase 2"]
     ]
     [:h3 "Worthy for consideration?"]
@@ -131,11 +129,17 @@
       [:div
         [:h2 "White Elephant Gift Selector"]
         [:h3 "FINAL WINNER"]
+          [:a {:href "/about"} "go to about page"]
+          " - "
+          [:a {:href "/"} "back to phase 1"]
         [product product-1]]
       (let [product-2 (second products)]
         [:div
          [:h2 "White Elephant Gift Selector"]
          [:h3 "Phase 2: Tournament"]
+          [:a {:href "/about"} "go to about page"]
+          " - "
+          [:a {:href "/"} "back to phase 1"]
 
          [:h4 (str "There are " (- (count products) 2) " match-ups after this!")]
 

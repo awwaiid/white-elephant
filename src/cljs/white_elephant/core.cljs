@@ -19,7 +19,7 @@
 
 
 (defn about-page []
-  [:div [:h2 "About White Elephant Gift Selector"]
+  [:div [:h1 "About White Elephant Gift Selector"]
    [:div [:a {:href "/"} "go to the home page"]]
    [:div [:p
           "This is a tool to pick out the BEST White Elephant Gift!"]]
@@ -89,9 +89,12 @@
   (dlog (str "Re-render product:" (get product-info :title)))
    [:div.product.clearfix
      [:img.photo { :src (get product-info :img) }]
-     [:div.price "Price " (get product-info :price)]
-     [:a.buy-link { :href (get product-info :url) :target "_blank" } "Product Details / Buy"]
-     [:h3.title (get product-info :title)]])
+     [:div.desc
+       [:h3.title (get product-info :title)]
+       [:div.price "Price " (get product-info :price)]
+       [:a.buy-link { :href (get product-info :url) :target "_blank" } "Buy it on BLINQ"]
+     ]
+     ])
 
 (defn possible-products-count []
   (let [c (count (@app-state :possible-products))]
@@ -104,8 +107,8 @@
   ;   (secretary/dispatch! "/"))
   [:div
 
-   [:h2 "White Elephant Gift Selector"]
-   [:h3 "Phase 1: Triage"]
+   [:h1 "White Elephant Gift Selector"]
+   [:h2 "First: Build Your Product List"]
    ; [:div [:a {:href "/about"} "go to about page"] ]
    ; [:a {:href "/about"} "go to about page"]
 
@@ -115,12 +118,12 @@
    [:br]])
 
    [:div.current
-    [:h3 "Worthy for consideration?"]
-     [:div.actions.clearfix
-      [:a.another { :onClick next-product } "Next!"]
-      [:a.thisone { :onClick save-product } "Keep it!"]]
-   ; [:hr]
-    [product (get @app-state :product)]]
+      [:h3 "Worth Adding To Your List?"]
+      [product (get @app-state :product)]
+      [:div.actions.clearfix
+        [:a.another { :onClick next-product } "🚫 Nope"]
+        [:a.thisone { :onClick save-product } "👍Keep it! "]]]
+    ;
 
   [:div.contenders
   ; For debugging
@@ -156,16 +159,16 @@
     ; (dlog (str "product-2: " (product-2 :title)))
     (if (= product-count 1)
       [:div
-        [:h2 "White Elephant Gift Selector"]
-        [:h3 "FINAL WINNER"]
+        [:h1 "White Elephant Gift Selector"]
+        [:h2 "WE HAVE A WINNER! YOU FOUND YOUR GIFT!"]
           [:a {:href "/about"} "go to about page"]
           " - "
           [:a {:href "/"} "back to phase 1"]
         [product product-1]]
       (let [product-2 (second products)]
         [:div
-         [:h2 "White Elephant Gift Selector"]
-         [:h3 "Phase 2: Tournament"]
+         [:h1 "White Elephant Gift Selector"]
+         [:h2 "Phase 2: Tournament"]
           [:a {:href "/about"} "go to about page"]
           " - "
           [:a {:href "/"} "back to phase 1"]

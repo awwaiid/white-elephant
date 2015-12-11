@@ -11,17 +11,14 @@
 *:first-child+html .clearfix { zoom: 1; } /* IE7 */
 
 body {
-  font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
-  /* max-width: 600px; */
+  font-family: 'Lato','Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   margin: 0 auto;
-  /* padding-top: 72px; */
   -webkit-font-smoothing: antialiased;
   font-size: 1em;
-  /* font-size: 1em; */
   color: #333;
+  background: #f5f5f5;
   line-height: 1.5em;
   width: 800px;
-  /* background-color: #999; */
 }
 
 #app {
@@ -33,15 +30,21 @@ h1, h2, h3 {
   color: #000;
 }
 h1 {
-  font-size: 2.5em
+  font-size: 3em;
+  font-weight: 300;
 }
 
 h2 {
-  font-size: 2em
+  font-size: 1em;
+  background: #ec0000;
+  padding: 10px 25px;
+  color: white;
+  border-radius: 500px;
 }
 
 h3 {
-  font-size: 1.5em
+  font-size: 1.25em;
+  margin: 0px 0px 20px 0px;
 }
 
 a {
@@ -53,36 +56,108 @@ a:hover {
   text-decoration: underline;
 }
 
+.current {
+  padding: 60px;
+  display: block;
+  background: white;
+}
+
+.current .product {
+  padding: 20px 0px 0px 0px;
+}
+
 .product {
-  border: 1px solid black;
-  /* float: left; */
-  width: 400px;
-  padding: 10px;
+  padding-top: 20px;
+  background: white;
+  padding: 60px;
 }
 /* .best img, .current img { */
 .product img {
   float: left;
   margin-right: 20px;
- border: 1px solid black;
+}
+
+.product .desc {
+  overflow: hidden;
+}
+
+.product h3 {
+  font-size: 2em;
+  line-height: 1.3em;
+}
+
+.product .price {
+  font-size: 1.5em;
+  display: inline-block;
+  padding-bottom: 20px;
+}
+
+.product .buy-link {
+  clear: both;
+  font-size: .9em;
+  border-radius: 500px;
+  background: #39b54a;
+  padding: 5px 20px;
+  margin-left: 20px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: all .2s;
+  display: inline-block;
+  position: relative;
+  top: -2px
+}
+
+.product .buy-link:hover {
+  background: #258432;
+  text-decoration: none
+}
+
+
+
+.actions {
+  clear: both;
+  display: block;
+  padding-top: 20px;
 }
 
 .another, .thisone, .onward {
-  border: 1px solid black;
-  float: left;
-  /* height: 100px; */
-  width: 190px;
+  width: 49%;
+  display: inline-block;
   padding: 10px;
+  box-sizing: border-box;
   cursor: pointer;
+  text-align: center;
+  transition: all .2s;
+  border-radius: 500px;
+  font-size: 1.75em;
+  line-height: 1.75em;
+}
+
+.another:hover, .thisone:hover, .onward:hover {
+  text-decoration: none;
 }
 
 .another {
-  background-color: coral;
+  background-color: #cfcfcf;
   color: black;
+  margin-right: 1%;
 }
+
+.another:hover {
+  background: #b1b1b1;
+}
+
 .thisone {
-  background-color: aquamarine;
-  color: black;
+  background-color: #1774dd;
+  color: white;
+  margin-left: 1%;
 }
+
+.thisone:hover {
+  background: #115cb1;
+}
+
 .onward {
   background-color: lightgreen;
   width: 400px;
@@ -93,33 +168,42 @@ a:hover {
 /* .contenders { */
 /*   border: 1px solid black; */
 /* } */
-.contenders .price, .contenders .buy-link {
+.contenders .price {
   font-size: 1em;
   display: inline;
   margin-right: 1em;
 }
-.contenders .title {
+
+.contenders .buy-link {
+  font-size: .85em;
+  padding: 2px 10px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.contenders h3.title {
   font-size: 1em;
   margin: 0;
   overflow: hidden;
-  height: 3em;
+  max-height: 2.75em;
+  padding-right: 140px;
 }
 .contenders .product {
-  width: 700px;
-  /* border: 1px solid red; */
   border: 0;
   padding: 0;
-  border-top: 1px solid black;
-  margin-top: 0.25em;
-  padding-top: 0.5em;
+  background: white;
+  padding: 15px;
+  display: block;
   clear: both;
+  margin-top: 10px;
+  position: relative;
 }
 
 .contenders .product img {
   width: 50px;
   height: 50px;
   margin: 0;
-  /* border: 1px solid green; */
   float: left;
   margin-right: 1em;
 }
@@ -133,9 +217,47 @@ hr {
 }
 
 .compare {
-  border: 1px solid black;
+  width: 49%;
+  float: left;
+  background: white;
+  padding: 60px;
+  box-sizing: border-box;
+}
+
+.compare:first-child {
+  margin-right: 2%;
 }
 
 .compare .product {
-  border: 0;
+  text-align: center;
+}
+
+.compare img {
+  float: none;
+  margin: 0px 0px 15px 0px;
+  width: auto;
+  height: 240px;
+}
+
+.compare .desc {
+  display: block;
+  float: none;
+}
+
+.compare .another, 
+.compare .thisone {
+  width: 100%;
+  margin: 0px;
+  background-color: #1774dd;
+  color: white;
+}
+
+.compare .another:hover, 
+.compare .thisone:hover {
+  background: #115cb1;
+}
+
+
+.compare h3 {
+  font-size: 1.5em;
 }

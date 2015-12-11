@@ -100,7 +100,10 @@
   (let [c (count (@app-state :possible-products))]
     [:div.selected-count
      [:strong.count (str c)]
-     (str " products selected (16+ needed)")]))
+     (str " products selected")
+     [:div.instruction
+       (str "16 or more needed for the tournament to begin")
+      ]]))
 
 (defn triage-products []
   ; (if (< (count (@app-state :possible-products)) 1)
@@ -168,7 +171,7 @@
       (let [product-2 (second products)]
         [:div
          [:h1 "White Elephant Gift Selector"]
-         [:h2 "Phase 2: Tournament"]
+         [:h2 "Next: Tournament of the Gifts"]
           [:a {:href "/about"} "go to about page"]
           " - "
           [:a {:href "/"} "back to phase 1"]

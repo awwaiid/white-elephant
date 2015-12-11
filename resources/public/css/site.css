@@ -56,6 +56,30 @@ a:hover {
   text-decoration: underline;
 }
 
+.selected-count {
+  padding: 20px;
+  font-size: 1.3em;
+}
+
+.count {
+  background: #1774dd;
+  color: white;
+  border-radius: 100%;
+  padding:10px;
+  width: 45px;
+  height: 45px;
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: center;
+}
+
+.instruction {
+  font-size: .75em;
+  color: darkgray;
+  margin-left: 45px;
+}
+
+
 .current {
   padding: 60px;
   display: block;
@@ -121,7 +145,7 @@ a:hover {
   padding-top: 20px;
 }
 
-.another, .thisone, .onward {
+.another, .thisone {
   width: 49%;
   display: inline-block;
   padding: 10px;
@@ -136,6 +160,30 @@ a:hover {
 
 .another:hover, .thisone:hover, .onward:hover {
   text-decoration: none;
+}
+
+@-webkit-keyframes pulse {
+  0% { background-color: #1774dd;}
+  50% {background-color: #2785ef;}
+  100% {background-color: #1774dd; }
+}
+
+.onward {
+  font-size: 1.4em;
+  border-radius: 500px;
+  padding: 15px;
+  display: block;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  -webkit-animation-name: pulse;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  transition: all .2s;
+}
+
+.onward:hover {
+  font-size: 1.6em;
 }
 
 .another {
@@ -158,13 +206,6 @@ a:hover {
   background: #115cb1;
 }
 
-.onward {
-  background-color: lightgreen;
-  width: 400px;
-  color: black;
-  clear: both;
-}
-
 /* .contenders { */
 /*   border: 1px solid black; */
 /* } */
@@ -178,7 +219,7 @@ a:hover {
   font-size: .85em;
   padding: 2px 10px;
   position: absolute;
-  top: 15px;
+  top: 27px;
   right: 15px;
 }
 
@@ -212,9 +253,6 @@ hr {
   clear: both;
 }
 
-.count {
-  font-size: 2em;
-}
 
 .compare {
   width: 49%;
@@ -230,6 +268,8 @@ hr {
 
 .compare .product {
   text-align: center;
+  padding: 0px;
+  margin-top: 20px;
 }
 
 .compare img {

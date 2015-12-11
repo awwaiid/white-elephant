@@ -31,6 +31,7 @@
      [:meta {:charset "utf-8"}]
      [:meta {:name "viewport"
              :content "width=device-width, initial-scale=1"}]
+     (include-css (if (env :dev) "https://fonts.googleapis.com/css?family=Lato:400,100,300,700,900"))
      (include-css (if (env :dev) "css/site.css" "css/site.min.css"))]
     [:body
      mount-target

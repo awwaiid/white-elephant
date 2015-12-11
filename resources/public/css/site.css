@@ -64,9 +64,9 @@ a:hover {
 .count {
   background: #1774dd;
   color: white;
-  border-radius: 100%;
+  border-radius: 500px;
   padding:10px;
-  width: 45px;
+  min-width: 45px;
   height: 45px;
   box-sizing: border-box;
   display: inline-block;

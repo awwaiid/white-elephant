@@ -108,6 +108,15 @@ a:hover {
 .product h3 {
   font-size: 2em;
   line-height: 1.3em;
+  height: 5em;
+  transition: all .2s;
+  overflow: hidden;
+  display: block;
+}
+
+.product h3:hover {
+  min-height: 5em;
+  height: auto;
 }
 
 .product .price {
@@ -129,7 +138,12 @@ a:hover {
   transition: all .2s;
   display: inline-block;
   position: relative;
-  top: -2px
+  top: -2px;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  -ms-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-user-select: none;
 }
 
 .product .buy-link:hover {
@@ -137,6 +151,9 @@ a:hover {
   text-decoration: none
 }
 
+.product .buy-link:active {
+  transform: scale(.95, .95);
+}
 
 
 .actions {
@@ -145,7 +162,7 @@ a:hover {
   padding-top: 20px;
 }
 
-.another, .thisone {
+a.another, a.thisone {
   width: 49%;
   display: inline-block;
   padding: 10px;
@@ -156,10 +173,18 @@ a:hover {
   border-radius: 500px;
   font-size: 1.75em;
   line-height: 1.75em;
+  font-weight: 500;
+  -webkit-user-select: none;
+}
+
+.thisone:active, .another:active {
+  transform: scale(.95, .95);
+  font-weight: 500;
 }
 
 .another:hover, .thisone:hover, .onward:hover {
   text-decoration: none;
+  font-weight: 500;
 }
 
 @-webkit-keyframes pulse {
@@ -188,7 +213,7 @@ a:hover {
 
 .another {
   background-color: #cfcfcf;
-  color: black;
+  color: #e61616;
   margin-right: 1%;
 }
 

@@ -14,9 +14,9 @@ body {
   font-family: 'Helvetica Neue', Verdana, Helvetica, Arial, sans-serif;
   /* max-width: 600px; */
   margin: 0 auto;
-  padding-top: 72px;
+  /* padding-top: 72px; */
   -webkit-font-smoothing: antialiased;
-  font-size: 1.125em;
+  font-size: 1em;
   /* font-size: 1em; */
   color: #333;
   line-height: 1.5em;
@@ -59,7 +59,8 @@ a:hover {
   width: 400px;
   padding: 10px;
 }
-.best img, .current img {
+/* .best img, .current img { */
+.product img {
   float: left;
   margin-right: 20px;
  border: 1px solid black;
@@ -76,9 +77,11 @@ a:hover {
 
 .another {
   background-color: coral;
+  color: black;
 }
 .thisone {
   background-color: aquamarine;
+  color: black;
 }
 .onward {
   background-color: lightgreen;

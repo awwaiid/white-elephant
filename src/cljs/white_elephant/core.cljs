@@ -13,11 +13,20 @@
 ; ;; -------------------------
 ; ;; Views
 
+; (def Swipe (reagent/adapt-react-class js/ReactSwipe))
+; (def Swipe (reagent/adapt-react-class (aget js/ReactSwipe ReactSwipe)))
+; (def Button (reagent/adapt-react-class (aget js/ReactBootstrap "Button")))
+
+
 (defn about-page []
   [:div [:h2 "About White Elephant Gift Selector"]
    [:div [:a {:href "/"} "go to the home page"]]
    [:div [:p
           "This is a tool to pick out the BEST White Elephant Gift!"]]
+    ; [Swipe
+    ;  [:div "pane1"]
+    ;  [:div "pane2"]
+    ;  [:div "pane3"]]
    ])
 
 (defonce app-state (atom {
@@ -50,6 +59,7 @@
   (GET "/random-product" {
                           :response-format :json
                           :keywords? true
+                          :error-handler next-product
                           :handler next-product-handler}))
 
 (defn first-product-handler [response]
@@ -63,11 +73,16 @@
   (GET "/random-product" {
                           :response-format :json
                           :keywords? true
+                          :error-handler first-product
                           :handler first-product-handler}))
 
+(defn seq-contains? [coll target] (some #(= target %) coll))
+
 (defn save-product []
-  (swap! app-state update-in [:possible-products] conj (get @app-state :product))
-  (swap! app-state update-in [:possible-products] shuffle)
+  (if (not (seq-contains? (map :title (@app-state :possible-products)) (get-in @app-state [:product :title])))
+    (do (
+      (swap! app-state update-in [:possible-products] conj (get @app-state :product))
+      (swap! app-state update-in [:possible-products] shuffle))))
   (next-product))
 
 (defn product [product-info]
@@ -85,26 +100,27 @@
      (str " products selected (16+ needed)")]))
 
 (defn triage-products []
+  ; (if (< (count (@app-state :possible-products)) 1)
+  ;   (secretary/dispatch! "/"))
   [:div
 
    [:h2 "White Elephant Gift Selector"]
    [:h3 "Phase 1: Triage"]
+   ; [:div [:a {:href "/about"} "go to about page"] ]
+   ; [:a {:href "/about"} "go to about page"]
 
    [possible-products-count]
+   (if (>= (count (@app-state :possible-products)) 16)
+      [:div [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")]
+   [:br]])
 
    [:div.current
-   [:div
-    [:a {:href "/about"} "go to about page"]
-    " - "
-    ]
     [:h3 "Worthy for consideration?"]
      [:div.actions.clearfix
-      [:div.another { :onClick next-product } "Next!"]
-      [:div.thisone { :onClick save-product } "Keep it!"]]
+      [:a.another { :onClick next-product } "Next!"]
+      [:a.thisone { :onClick save-product } "Keep it!"]]
    ; [:hr]
     [product (get @app-state :product)]]
-   (if (>= (count (@app-state :possible-products)) 16)
-      [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")])
 
   [:div.contenders
   ; For debugging

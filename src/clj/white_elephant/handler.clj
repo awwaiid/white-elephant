@@ -87,6 +87,7 @@
 
 (defroutes routes
   (GET "/" [] loading-page)
+  (GET "/triage" [] loading-page)
   (GET "/about" [] loading-page)
   (GET "/intro" [] loading-page)
   (GET "/tournament" [] loading-page)

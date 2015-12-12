@@ -99,13 +99,14 @@
 (defn seq-contains? [coll target] (some #(= target %) coll))
 
 (defn save-product []
-  (if (not (seq-contains? (map :title (@app-state :possible-products)) (get-in @app-state [:product :title])))
-    (do (
-      (swap! app-state update-in [:possible-products] conj (@app-state :product))
-      (swap! app-state assoc :product {})
-      ; (swap! app-state update-in [:possible-products] shuffle))
-        )))
-  (next-product))
+  (if (@app-state :product)
+    (if (not (seq-contains? (map :title (@app-state :possible-products)) (get-in @app-state [:product :title])))
+      (do (
+        (swap! app-state update-in [:possible-products] conj (@app-state :product))
+        (swap! app-state assoc :product {})
+        ; (swap! app-state update-in [:possible-products] shuffle))
+          ))))
+    (next-product))
 
 (defn product [product-info]
   (dlog (str "Re-render product:" (get product-info :title)))
@@ -196,6 +197,9 @@
          [product product-1]]
 
        (let [product-2 (second products)]
+
+         [:div
+
          [:h4.remaining-count
           [:span "There are "]
           [:span.count (- (count products) 2)]
@@ -215,7 +219,7 @@
          ; (map product (@app-state :possible-products))
          ;  ]
 
-         ))]))
+         ]))]))
 
 (defn intro []
   (swap! app-state assoc :intro-seen true)

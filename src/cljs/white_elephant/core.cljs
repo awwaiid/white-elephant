@@ -19,70 +19,92 @@
 
 
 (defn about-page []
-  [:div [:h1 "About White Elephant Gift Selector"]
-   [:div [:a {:href "/"} "go to the home page"]]
-   [:div [:p
-          "This is a tool to pick out the BEST White Elephant Gift!"]]
+  [:div
+     [:center
+      [:h1 "White Elephant Gift Selector"]
+      [:a {:href "/intro"} "Intro"]
+      " - "
+      [:a {:href "/about"} "About"]
+      " - "
+      [:a {:href "/triage"} "Start triage!"]
+      [:h2 "About: What is this thing?!"]]
+     [:p "I (Brock - awwaiid@thelackthereof.org) work for blinq.com, and
+         thought it would be cool to make a gift picker in my free time."]
+     [:a { :href "https://github.com/awwaiid/white-elephant" } "Github"]
+     " - "
+     [:a { :href "https://twitter.com/awwaiid" } "@awwaiid"]
+     ])
     ; [Swipe
     ;  [:div "pane1"]
     ;  [:div "pane2"]
     ;  [:div "pane3"]]
-   ])
 
 (defonce app-state (atom {
                           :text "Hello to all the really strange wonderful weird new world!"
                           :min-price 0
                           :max-price 2000
                           :possible-products []
-                          :product {
-                                    :img ""
-                                    :title ""
-                                    :url ""
-                                    :price ""
-                                    }
-                          :next-product {
-                                         :img ""
-                                         :title ""
-                                         :url ""
-                                         :price ""
-                                         }
+                          ; :product {
+                          ;           :img ""
+                          ;           :title ""
+                          ;           :url ""
+                          ;           :price ""
+                          ;           }
+                          :next-products []
                           }))
 
-(defn next-product-handler [response]
-  ; (.log js/console (str response))
-  (swap! app-state assoc :next-product response)
-  ; Pre-fetch the image, specifically
-  (aset (js/Image.) "src" (get response :img)))
+(def prefetch-count 10)
 
-(defn next-product []
-  (swap! app-state assoc :product (get @app-state :next-product))
-  (GET "/random-product" {
-                          :response-format :json
-                          :keywords? true
-                          :error-handler next-product
-                          :handler next-product-handler}))
+(declare next-product)
 
-(defn first-product-handler [response]
-  ; (.log js/console (str response))
-  (swap! app-state assoc :next-product response)
+(defn prefetch-product-handler [response]
+  ; (swap! app-state update-in [:next-products] conj response)
+  (swap! app-state update-in [:next-products] concat [response])
   ; Pre-fetch the image, specifically
   (aset (js/Image.) "src" (get response :img))
-  (next-product))
+  (if (not (@app-state :product)) (next-product)))
 
-(defn first-product []
+(defn prefetch-product []
   (GET "/random-product" {
                           :response-format :json
                           :keywords? true
-                          :error-handler first-product
-                          :handler first-product-handler}))
+                          :error-handler prefetch-product
+                          :handler prefetch-product-handler}))
+
+(defn prefetch-products []
+  (if (< (count (@app-state :next-products)) prefetch-count)
+    (dotimes [n (- prefetch-count (count (@app-state :next-products)))]
+      (prefetch-product))))
+
+(defn next-product []
+  (let [product (first (@app-state :next-products))]
+    (swap! app-state assoc :product product)
+    (swap! app-state update-in [:next-products] rest)
+    (prefetch-products)))
+
+; (defn first-product-handler [response]
+;   ; (.log js/console (str response))
+;   (swap! app-state assoc :next-product response)
+;   ; Pre-fetch the image, specifically
+;   (aset (js/Image.) "src" (get response :img))
+;   (next-product))
+
+; (defn first-product []
+;   (GET "/random-product" {
+;                           :response-format :json
+;                           :keywords? true
+;                           :error-handler first-product
+;                           :handler first-product-handler}))
 
 (defn seq-contains? [coll target] (some #(= target %) coll))
 
 (defn save-product []
   (if (not (seq-contains? (map :title (@app-state :possible-products)) (get-in @app-state [:product :title])))
     (do (
-      (swap! app-state update-in [:possible-products] conj (get @app-state :product))
-      (swap! app-state update-in [:possible-products] shuffle))))
+      (swap! app-state update-in [:possible-products] conj (@app-state :product))
+      (swap! app-state assoc :product {})
+      ; (swap! app-state update-in [:possible-products] shuffle))
+        )))
   (next-product))
 
 (defn product [product-info]
@@ -110,10 +132,12 @@
   ;   (secretary/dispatch! "/"))
   [:div
 
-   [:h1 "White Elephant Gift Selector"]
-   [:h2 "First: Build Your Product List"]
-   ; [:div [:a {:href "/about"} "go to about page"] ]
-   ; [:a {:href "/about"} "go to about page"]
+   [:center
+    [:h1 "White Elephant Gift Selector"]
+    [:a {:href "/intro"} "Intro"]
+    " - "
+    [:a {:href "/about"} "About"]
+    [:h2 "Triage: Build Your Product List"]]
 
    [possible-products-count]
    (if (>= (count (@app-state :possible-products)) 16)
@@ -126,14 +150,15 @@
       [:div.actions.clearfix
         [:a.another { :onClick next-product } "Not For Me"]
         [:a.thisone { :onClick save-product } "👍Keep it! "]]]
-    ;
 
-  [:div.contenders
-  ; For debugging
-  (map product (@app-state :possible-products))
-   ]
-  ]
-  )
+   [:div.contenders
+
+     ; For debugging
+     ; [:div (str (count (@app-state :next-products)) " products prefetched")]
+     ; (map product (@app-state :next-products))
+     ; [:hr]
+
+     (map product (@app-state :possible-products))]])
 
 (defn tournament-keep [product]
     (dlog (str "Keeping product " product))
@@ -151,46 +176,71 @@
     (dlog "Done keeping"))
 
 (defn tournament []
-  (dlog "Re-render tournament")
-  ; (let [product-1 (first (@app-state :possible-products))
-  ;       product-2 (second (@app-state :possible-products))]
   (let [products (@app-state :possible-products)
         product-count (count products)
         product-1 (first products)]
-    (dlog (str "Currently there are " (count (@app-state :possible-products))))
-    (dlog (str "product-1: " (product-1 :title)))
-    ; (dlog (str "product-2: " (product-2 :title)))
-    (if (= product-count 1)
-      [:div
-        [:h1 "White Elephant Gift Selector"]
-        [:h2 "WE HAVE A WINNER! YOU FOUND YOUR GIFT!"]
-          [:a {:href "/about"} "go to about page"]
-          " - "
-          [:a {:href "/"} "back to phase 1"]
-        [product product-1]]
-      (let [product-2 (second products)]
-        [:div
-         [:h1 "White Elephant Gift Selector"]
-         [:h2 "Next: Tournament of the Gifts"]
-          [:a {:href "/about"} "go to about page"]
-          " - "
-          [:a {:href "/"} "back to phase 1"]
+    [:div
+     [:center
+      [:h1 "White Elephant Gift Selector"]
+      [:a {:href "/intro"} "Intro"]
+      " - "
+      [:a {:href "/about"} "About"]
+      " - "
+      [:a {:href "/triage"} "Back to Triage Phase"]
+      [:h2 "Tournament: There can be only one!"]]
 
+     (if (= product-count 1)
+
+       [:div
+         [:h2 "WE HAVE A WINNER! YOU FOUND YOUR GIFT!"]
+         [product product-1]]
+
+       (let [product-2 (second products)]
          [:h4.remaining-count
           [:span "There are "]
           [:span.count (- (count products) 2)]
           [:span " match-ups after this!"]]
 
          [:div.clearfix
-           [:div.compare
-             [:div.clearfix [:div.another { :onClick #(tournament-keep product-1) } "This one"]]
-             [product product-1]]
+          [:div.compare
+           [:div.clearfix [:a.another { :onClick #(tournament-keep product-1) } "This one"]]
+           [product product-1]]
 
-           [:div.compare
-             [:div.clearfix [:div.thisone { :onClick #(tournament-keep product-2) } "This one"]]
-             [product product-2]]]
+          [:div.compare
+           [:div.clearfix [:a.thisone { :onClick #(tournament-keep product-2) } "This one"]]
+           [product product-2]]]
 
-         ]))))
+         ; ; For debugging
+         ; [:div.contenders
+         ; (map product (@app-state :possible-products))
+         ;  ]
+
+         ))]))
+
+(defn intro []
+  (swap! app-state assoc :intro-seen true)
+  [:div
+   [:center
+    [:h1 "White Elephant Gift Selector"]
+    [:a {:href "/intro"} "Intro"]
+    " - "
+    [:a {:href "/about"} "About"]]
+   [:p "So you're going to a White Elephant Gift Exchange Party (WEGEP)!  It is
+       VITAL that you show up with a great gift. But there are so many choices!
+       What to do?"]
+   [:p
+    [:strong "Triage Phase: "]
+    "We'll look through a bunch of random products, keeping the potential
+    gifts. Pick out at least 16. You decide what is worthy for consideration...
+    Funny? Work-appropriate? Kinda Awesome?"]
+   [:p
+    [:strong "Tournament Phase: "]
+    "Now that you have some potentials, it's time to pick THE BEST! Two enter
+    the ring, one leaves... in the end there can be only one!"]
+
+   [:center [:a.thisone { :href "/triage" } "Begin the triage!"]]
+
+   ])
 
 
 ; (defn on-js-reload []
@@ -207,7 +257,13 @@
 ;; Routes
 
 (secretary/defroute "/" []
+  (session/put! :current-page #'intro))
+
+(secretary/defroute "/triage" []
   (session/put! :current-page #'triage-products))
+
+(secretary/defroute "/intro" []
+  (session/put! :current-page #'intro))
 
 (secretary/defroute "/about" []
   (session/put! :current-page #'about-page))
@@ -224,5 +280,6 @@
 (defn init! []
   (accountant/configure-navigation!)
   (accountant/dispatch-current!)
-  (first-product)
+  ; (secretary/dispatch! "/"))
+  (next-product)
   (mount-root))

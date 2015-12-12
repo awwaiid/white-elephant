@@ -168,7 +168,7 @@ a:hover {
   padding-top: 20px;
 }
 
-a.another, a.thisone {
+.another, .thisone {
   width: 49%;
   display: inline-block;
   padding: 10px;
@@ -284,6 +284,10 @@ a.another, a.thisone {
   margin-right: 1em;
 }
 
+.compare .another, .compare .thisone {
+  width: 90%;
+}
+
 hr {
   clear: both;
 }
@@ -319,18 +323,18 @@ hr {
   float: none;
 }
 
-.compare .another, 
-.compare .thisone {
-  width: 100%;
-  margin: 0px;
-  background-color: #1774dd;
-  color: white;
-}
+/* .compare .another, */ 
+/* .compare .thisone { */
+/*   width: 100%; */
+/*   margin: 0px; */
+/*   background-color: #1774dd; */
+/*   color: white; */
+/* } */
 
-.compare .another:hover, 
-.compare .thisone:hover {
-  background: #115cb1;
-}
+/* .compare .another:hover, */ 
+/* .compare .thisone:hover { */
+/*   background: #115cb1; */
+/* } */
 
 
 .compare h3 {

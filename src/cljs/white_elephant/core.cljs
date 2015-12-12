@@ -142,7 +142,14 @@
 
    [possible-products-count]
    (if (>= (count (@app-state :possible-products)) 16)
-      [:div [:a.onward {:href "/tournament"} (str (count (@app-state :possible-products)) " is enough... Tournament time!")]
+      [:div [:a.onward {:href "/tournament"
+                        :onClick #( do (
+         (swap! app-state update-in [:possible-products] shuffle)
+
+  (secretary/dispatch! "/tournament"))
+
+                                   )
+                        } (str (count (@app-state :possible-products)) " is enough... Tournament time!")]
    [:br]])
 
    [:div.current

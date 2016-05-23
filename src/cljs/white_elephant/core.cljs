@@ -157,7 +157,7 @@
       [product (get @app-state :product)]
       [:div.actions.clearfix
         [:a.another { :onClick next-product } "Not For Me"]
-        [:a.thisone { :onClick save-product } "👍Keep it! "]]]
+        [:a.thisone { :onClick save-product } "Keep it! "]]]
 
    [:div.contenders
 

@@ -1,0 +1,120 @@
+@import url(https://fonts.googleapis.com/css?family=Playball);
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center; }
+
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: none;
+  width: 100%; }
+  .header .heading {
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .header .heading .title-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: 'Playball', cursive;
+      margin: 0 40px; }
+      .header .heading .title-box .title {
+        font-size: 40px; }
+      .header .heading .title-box .subtitle {
+        font-size: 20px; }
+    .header .heading .logo {
+      height: 100px;
+      margin: 10px; }
+
+.nav {
+  display: flex;
+  justify-content: space-between; }
+  .nav .nav-item {
+    width: 100%; }
+    .nav .nav-item a {
+      display: block;
+      padding: 0.5em;
+      text-align: center;
+      text-decoration: none;
+      background-color: darkred;
+      color: white; }
+      .nav .nav-item a:hover {
+        background-color: #a50000; }
+    .nav .nav-item a.current {
+      background-color: #be0000; }
+
+.page {
+  margin: 1em 4em;
+  max-width: 600px; }
+
+.about-page, .intro-page {
+  font-size: 1.25em;
+  line-height: 1.75em;
+  text-align: justify; }
+
+.product {
+  border: 1px solid black;
+  width: 200px;
+  padding: 20px;
+  background-color: #cdd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; }
+  .product img {
+    border: 1px solid black;
+    width: 200px; }
+  .product .buy-link {
+    text-decoration: none;
+    color: black; }
+  .product .title {
+    font-size: 15px;
+    line-height: 25px;
+    height: 75px;
+    overflow: hidden; }
+
+.triage {
+  display: flex;
+  flex-direction: column; }
+  .triage .triage-products {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; }
+
+.contenders {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-content: flex-start;
+  justify-content: flex-start; }
+  .contenders .product {
+    margin: 0 0 5px 5px;
+    padding: 5px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: row; }
+    .contenders .product * {
+      font-size: 10px; }
+    .contenders .product .desc {
+      display: none; }
+    .contenders .product button {
+      height: 3em;
+      width: 4em;
+      z-index: 2; }
+  .contenders img {
+    height: 40px;
+    width: 40px;
+    margin: 5px; }
+
+.bracket .comparison {
+  display: flex;
+  flex-direction: row; }
+
+.comment-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; }
+
+/*# sourceMappingURL=base.css.map */

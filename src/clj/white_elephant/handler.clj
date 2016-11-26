@@ -32,7 +32,10 @@
       [:meta {:name "viewport"
               :content "width=device-width, initial-scale=1"}]
       (include-css "https://fonts.googleapis.com/css?family=Lato:400,100,300,700,900")
-      (include-css (if (env :dev) "css/site.css" "css/site.min.css"))]
+      (include-css (if (env :dev) "css/site.css" "css/site.min.css"))
+      (include-css "css/base.css")
+      (include-css "css/normalize.css")
+      ]
      [:body
       mount-target
       (include-js "js/app.js")]]))
@@ -41,7 +44,7 @@
   (enlive/html-resource (java.net.URL. url)))
 
 (defn random-product-url []
-  (let [offset (rand-int 9000)
+  (let [offset (rand-int 18000)
         low-price 0
         high-price 2000]
     (printf "Offset: %d\n" offset)

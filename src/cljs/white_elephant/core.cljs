@@ -19,6 +19,7 @@
 
 
 (defn about-page []
+  ; (let [swipe (reagent/adapt-react-class js/ReactSwipe)]
   [:div
      [:center
       [:h1 "White Elephant Gift Selector"]
@@ -32,8 +33,12 @@
          thought it would be cool to make a gift picker in my free time."]
      [:a { :href "https://github.com/awwaiid/white-elephant" } "Github"]
      " - "
-     [:a { :href "https://twitter.com/awwaiid" } "@awwaiid"]
-     ])
+     [:a { :href "https://twitter.com/awwaiid" } "@awwaiid"]])
+     ; [:div
+     ;  "Hello"
+     ;  [swipe]
+     ;  ]
+     ; ]))
     ; [Swipe
     ;  [:div "pane1"]
     ;  [:div "pane2"]
@@ -44,6 +49,7 @@
                           :min-price 0
                           :max-price 2000
                           :possible-products []
+                          :total-products 32
                           ; :product {
                           ;           :img ""
                           ;           :title ""
@@ -96,14 +102,13 @@
 
 (defn product [product-info]
   (dlog (str "Re-render product:" (get product-info :title)))
-   [:div.product.clearfix
-     [:img.photo { :src (get product-info :img) }]
-     [:div.desc
-       [:h3.title (get product-info :title)]
-       [:div.price "Price " (get product-info :price)]
-       [:a.buy-link { :href (get product-info :url) :target "_blank" } "Buy it on BLINQ"]
-     ]
-     ])
+  [:div.product.clearfix
+   { :key (get product-info :title) }
+   [:img.photo { :src (get product-info :img) }]
+   [:div.desc
+    [:h3.title (get product-info :title)]
+    [:div.price "Price " (get product-info :price)]
+    [:a.buy-link { :href (get product-info :url) :target "_blank" } "Buy it on BLINQ"]]])
 
 (defn possible-products-count []
   (let [c (count (@app-state :possible-products))]
@@ -111,8 +116,7 @@
      [:strong.count (str c)]
      (str " products selected")
      [:div.instruction
-       (str "16 or more needed for the tournament to begin")
-      ]]))
+      (str "16 or more needed for the tournament to begin")]]))
 
 (defn triage-products []
   ; (if (< (count (@app-state :possible-products)) 1)
@@ -220,7 +224,10 @@
     [:a {:href "/intro"} "Intro"]
     " - "
     [:a {:href "/about"} "About"]]
-   [:p "So you're going to a White Elephant Gift Exchange Party (WEGEP)!  It is
+
+   [:img { :src "/white_elephant.png" :width "200px" :style { :float "left" :margin "1em" } } ]
+
+   [:p "So you're going to a White Elephant Gift Exchange Party!  It is
        VITAL that you show up with a great gift. But there are so many choices!
        What to do?"]
    [:p
@@ -232,6 +239,7 @@
     [:strong "Tournament Phase: "]
     "Now that you have some potentials, it's time to pick THE BEST! Two enter
     the ring, one leaves... in the end there can be only one!"]
+
 
    [:center [:a.thisone { :href "/triage" } "Begin the triage!"]]
 

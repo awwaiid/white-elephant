@@ -82,20 +82,6 @@
     (swap! app-state update-in [:next-products] rest)
     (prefetch-products)))
 
-; (defn first-product-handler [response]
-;   ; (.log js/console (str response))
-;   (swap! app-state assoc :next-product response)
-;   ; Pre-fetch the image, specifically
-;   (aset (js/Image.) "src" (get response :img))
-;   (next-product))
-
-; (defn first-product []
-;   (GET "/random-product" {
-;                           :response-format :json
-;                           :keywords? true
-;                           :error-handler first-product
-;                           :handler first-product-handler}))
-
 (defn seq-contains? [coll target] (some #(= target %) coll))
 
 (defn save-product []
@@ -143,7 +129,7 @@
    [possible-products-count]
    (if (>= (count (@app-state :possible-products)) 16)
       [:div [:a.onward {:href "/tournament"
-                        :onClick #( do (
+                        :on-click #( do (
          (swap! app-state update-in [:possible-products] shuffle)
 
   (secretary/dispatch! "/tournament"))
@@ -156,8 +142,10 @@
       [:h3 "Worth Adding To Your List?"]
       [product (get @app-state :product)]
       [:div.actions.clearfix
-        [:a.another { :onClick next-product } "Not For Me"]
-        [:a.thisone { :onClick save-product } "Keep it! "]]]
+        [:a.another { :on-click #(next-product) } "Not For Me"]
+        [:a.thisone { :on-click #(save-product) } "Keep it! "]
+        ]
+      ]
 
    [:div.contenders
 
@@ -166,7 +154,8 @@
      ; (map product (@app-state :next-products))
      ; [:hr]
 
-     (map product (@app-state :possible-products))]])
+     (map product (@app-state :possible-products))]
+   ])
 
 (defn tournament-keep [product]
     (dlog (str "Keeping product " product))
@@ -214,17 +203,12 @@
 
          [:div.clearfix
           [:div.compare
-           [:div.clearfix [:a.another { :onClick #(tournament-keep product-1) } "This one"]]
+           [:div.clearfix [:a.another { :on-click #(tournament-keep product-1) } "Thing one"]]
            [product product-1]]
 
           [:div.compare
-           [:div.clearfix [:a.thisone { :onClick #(tournament-keep product-2) } "This one"]]
+           [:div.clearfix [:a.thisone { :on-click #(tournament-keep product-2) } "Thing two"]]
            [product product-2]]]
-
-         ; ; For debugging
-         ; [:div.contenders
-         ; (map product (@app-state :possible-products))
-         ;  ]
 
          ]))]))
 
@@ -289,8 +273,11 @@
   (reagent/render [current-page] (.getElementById js/document "app")))
 
 (defn init! []
-  (accountant/configure-navigation!)
+  (accountant/configure-navigation!
+    {:nav-handler (fn [path] (secretary/dispatch! path))
+     :path-exists? (fn [path] (secretary/locate-route path))})
+  ; (secretary/dispatch! "/")
   (accountant/dispatch-current!)
-  ; (secretary/dispatch! "/"))
   (next-product)
-  (mount-root))
+  (mount-root)
+  )
